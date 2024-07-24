@@ -1,1 +1,10 @@
-
+pipeline {
+    agent any 
+    stages {
+        stage ("Gretting"){
+            steps {
+               sh 'echo "heloo we are creating a pipline "'
+            }
+        }
+}
+}
