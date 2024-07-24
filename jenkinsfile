@@ -28,8 +28,11 @@ pipeline {
         }
         stage("Push docker image") {
             steps {
-                dir("Astonvilla") {
-                    sh "docker push salsabilhamraoui510802/projetdevops/astonvilla:1.1.${env.BUILD_NUMBER}"
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh """
+                    docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+                    docker push salsabilhamraoui510802/projetdevops/astonvilla:1.1.${env.BUILD_NUMBER}
+                    """
                 }
             }
         }
