@@ -22,14 +22,14 @@ pipeline {
         stage("Generate docker image") {
             steps {
                 dir("Astonvilla") {
-                    sh "docker build -t salsabilhamraoui510802/projetdevops/astonvilla-app:1.1.${env.BUILD_NUMBER} ."
+                    sh "docker build -t salsabilhamraoui510802/astonvilla-app:1.1.${env.BUILD_NUMBER} ."
                 }
             }
         }
         stage("Push docker image") {
             steps {
                 dir("Astonvilla") {
-                    sh "docker push salsabilhamraoui510802/projetdevops/astonvilla-app:1.1.${env.BUILD_NUMBER}"
+                    sh "docker push salsabilhamraoui510802/astonvilla-app:1.1.${env.BUILD_NUMBER}"
                 }
             }
         }
