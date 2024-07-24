@@ -1,29 +1,36 @@
 pipeline {
-    agent any 
+    agent any
     stages {
-        stage ("Clean up"){
+        stage("Clean up") {
             steps {
+                // Supprimez uniquement les fichiers nécessaires ou assurez-vous que le répertoire est vide
                 sh 'rm -rf /root/.jenkins/workspace/test/*'
                 sh 'ls'
             }
         }
-        stage ("Clone repo"){
+        stage("Clone repo") {
             steps {
-                sh "git clone https://github.com/salsabylHam/Astonvilla.git"
+                // Assurez-vous que le répertoire 'Astonvilla' n'existe pas avant de cloner
+                sh '''
+                    if [ -d "Astonvilla" ]; then
+                        rm -rf Astonvilla
+                    fi
+                    git clone https://github.com/salsabylHam/Astonvilla.git
+                '''
             }
         }
-        stage ("Generate docker image") {
+        stage("Generate docker image") {
             steps {
-                 dir("Astonvilla"){
-                    sh "docker build -t salsabilhamraoui510802/Astonvilla:1.1.${env.BUILD_NUMBER} ."
-                }                
+                dir("Astonvilla") {
+                    sh "docker build -t salsabilhamraoui510802/projetdevops/astonvilla-app:1.1.${env.BUILD_NUMBER} ."
+                }
             }
         }
-        stage ("push docker image") {
+        stage("Push docker image") {
             steps {
-                 dir("Astonvilla"){
-                    sh "docker push salsabilhamraoui510802/Astonvilla:1.1.${env.BUILD_NUMBER}"
-                }                
+                dir("Astonvilla") {
+                    sh "docker push salsabilhamraoui510802/projetdevops/astonvilla-app:1.1.${env.BUILD_NUMBER}"
+                }
             }
         }
     }
