@@ -1,9 +1,11 @@
 pipeline {
     agent any 
     stages {
-        stage ("HIIII"){
+        stage ("Clean workspace"){
             steps {
-                sh 'echo "hello we are creating a first  pipline"'
+                sh 'sudo rm -rf /root/.jenkins/workspace/test'
+                sh 'ls'
+                sh 'pwd'
            
                 }                
             }
