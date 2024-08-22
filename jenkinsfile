@@ -22,5 +22,12 @@ pipeline {
               sh "docker push salsabilhamraoui510802/astonvilla-app:1.1.${env.BUILD_NUMBER}"
             }
         }
+ stage ("clone gitops repo") {
+            steps {
+              sh "git clone https://github.com/salsabylHam/argocd.git"
+            }
+        }
+
+
     }
 }
