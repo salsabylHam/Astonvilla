@@ -41,17 +41,18 @@ environment {
             }
         }
         stage ("Commit changes") {
-            steps {
-                dir('argocd/astonvilla-app') {
-                    script {
-                        sh 'git config user.email "jenkins@agent.com"'
-                        sh 'git config user.name "jenkins-admin"'
-                        sh 'git add astonvilla-deployment.yaml'
-                        sh 'git commit -m "updated image tag"'
-                        sh 'git push https://salsabylHam:${GITHUB_TOKEN}@github.com/salsabylHam/argocd.git master'
-                    }
-                }
+    steps {
+        dir('argocd/astonvilla-app') {
+            script {
+                sh 'git config user.email "jenkins@agent.com"'
+                sh 'git config user.name "jenkins-admin"'
+                sh 'git add astonvilla-deployment.yaml'
+                sh 'git commit -m "updated image tag"'
+                sh 'git push https://salsabylHam:${GITHUB_TOKEN}@github.com/salsabylHam/argocd.git main'
             }
         }
+    }
+}
+
     }
 }
