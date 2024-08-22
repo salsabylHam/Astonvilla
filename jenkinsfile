@@ -1,68 +1,54 @@
 pipeline {
     agent any 
     stages {
-        stage ("Clean up"){
+        stage ("Clean up") {
             steps {
-                 deleteDir()
+                deleteDir()
             }
         }
         stage('Checkout') {
             steps {
-              git url: 'https://github.com/salsabylHam/Astonvilla.git'
+                git url: 'https://github.com/salsabylHam/Astonvilla.git'
             }
         }
-       
         stage ("Generate docker image") {
             steps {
                 sh "docker build -t salsabilhamraoui510802/astonvilla-app:1.1.${env.BUILD_NUMBER} ."
             }
         }
-        stage ("push docker image") {
+        stage ("Push docker image") {
             steps {
-              sh "docker push salsabilhamraoui510802/astonvilla-app:1.1.${env.BUILD_NUMBER}"
+                sh "docker push salsabilhamraoui510802/astonvilla-app:1.1.${env.BUILD_NUMBER}"
             }
         }
- stage ("clone gitops repo") {
+        stage ("Clone gitops repo") {
             steps {
-              sh "git clone https://github.com/salsabylHam/argocd.git"
+                sh "git clone https://github.com/salsabylHam/argocd.git"
             }
         } 
-stage ("change image tag") {
+        stage ("Change image tag") {
             steps {
-             dir('argocd/astonvilla-app'){
-                script{
-                  def deployment = readFile('astonvilla-deployment.yaml')
-                  def updatedDeployment = deployment.replaceAll(/astonvilla-app:\s*[\w.-]+/, "astonvilla-app:1.1.${env.BUILD_NUMBER}")
-                  writeFile file: 'astonvilla-deployment.yaml', text: updatedDeployment
+                dir('argocd/astonvilla-app') {
+                    script {
+                        def deployment = readFile('astonvilla-deployment.yaml')
+                        def updatedDeployment = deployment.replaceAll(/astonvilla-app:\s*[\w.-]+/, "astonvilla-app:1.1.${env.BUILD_NUMBER}")
+                        writeFile file: 'astonvilla-deployment.yaml', text: updatedDeployment
+                    }
                 }
-              }
             }
         }
-
- stage ("commit changes") {
+        stage ("Commit changes") {
             steps {
-            dir('argocd/astonvilla-app'){
-                script{
-                      sh 'git config user.email "jenkins@agent.com"'
-                      sh 'git config user.name "jenkins-admin"'
-                      sh 'git add astonvilla-deployment.yaml'
-                      sh 'git commit -m "updated image tag"'
-                      sh 'git push https://salsabylHam${GITHUB_TOKEN}@github.com/salsabylHam/argocd.git master'
+                dir('argocd/astonvilla-app') {
+                    script {
+                        sh 'git config user.email "jenkins@agent.com"'
+                        sh 'git config user.name "jenkins-admin"'
+                        sh 'git add astonvilla-deployment.yaml'
+                        sh 'git commit -m "updated image tag"'
+                        sh 'git push https://salsabylHam${GITHUB_TOKEN}@github.com/salsabylHam/argocd.git master'
+                    }
                 }
-              }
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
