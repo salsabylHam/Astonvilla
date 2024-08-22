@@ -48,7 +48,7 @@ environment {
                         sh 'git config user.name "jenkins-admin"'
                         sh 'git add astonvilla-deployment.yaml'
                         sh 'git commit -m "updated image tag"'
-                        sh 'git push https://salsabylHam${GITHUB_TOKEN}@github.com/salsabylHam/argocd.git master'
+                        sh 'git push https://salsabylHam:${GITHUB_TOKEN}@github.com/salsabylHam/argocd.git master'
                     }
                 }
             }
