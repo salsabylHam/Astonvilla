@@ -11,11 +11,7 @@ pipeline {
               git url: 'https://github.com/salsabylHam/Astonvilla.git'
             }
         }
-        stage('Run Sonar Server') {
-            steps {
-              sh "docker-compose -f sonar-docker-compose.yaml up -d"
-            }
-        }
+       
         stage ("Generate docker image") {
             steps {
                 sh "docker build -t salsabilhamraoui510802/astonvilla-app:1.1.${env.BUILD_NUMBER} ."
